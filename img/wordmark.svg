@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 120">
+  <!--
+    Orator — Draft Wordmark
+    Plus Jakarta Sans 800 weight approximation.
+    Refine in Illustrator with the actual font.
+    Accent: Orator Amber #B45309
+  -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800&amp;display=swap');
+    .wordmark {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 800;
+      font-size: 88px;
+      letter-spacing: -0.03em;
+      fill: #B45309;
+    }
+  </style>
+  <text x="12" y="90" class="wordmark">Orator</text>
+</svg>

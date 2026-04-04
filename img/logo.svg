@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!--
+    Orator — Draft Logo
+    Concept: A document page (left) with sound waves radiating from it (right).
+    "Your document speaks." Refine in Illustrator.
+    Accent: Orator Amber #B45309
+  -->
+  <defs>
+    <style>
+      .mark { fill: #B45309; }
+    </style>
+  </defs>
+
+  <!-- Document body — rounded rectangle with folded corner -->
+  <path class="mark" d="
+    M 200 100
+    L 650 100
+    L 780 230
+    L 780 924
+    Q 780 944 760 944
+    L 220 944
+    Q 200 944 200 924
+    Z
+  "/>
+  <!-- Corner fold -->
+  <path d="
+    M 650 100
+    L 650 210
+    Q 650 230 670 230
+    L 780 230
+    Z
+  " fill="#92400E"/>
+
+  <!-- Text lines on document -->
+  <rect x="300" y="340" width="380" height="28" rx="14" fill="#FFFFFF" opacity="0.35"/>
+  <rect x="300" y="420" width="320" height="28" rx="14" fill="#FFFFFF" opacity="0.35"/>
+  <rect x="300" y="500" width="360" height="28" rx="14" fill="#FFFFFF" opacity="0.35"/>
+  <rect x="300" y="580" width="260" height="28" rx="14" fill="#FFFFFF" opacity="0.35"/>
+
+  <!-- Play triangle centered in lower portion of document -->
+  <path class="mark" d="
+    M 420 680
+    L 420 820
+    L 560 750
+    Z
+  " fill="#FFFFFF" opacity="0.9"/>
+</svg>

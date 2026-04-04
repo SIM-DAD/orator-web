@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orator — Present what you already wrote.</title>
+  <link rel="icon" type="image/svg+xml" href="img/logo.svg">
+  <meta name="description" content="Orator turns markdown documents into narrated, camera-ready videos using local voice cloning. No cloud. No subscription. Your voice, your machine.">
+  <meta property="og:title" content="Orator — Present what you already wrote.">
+  <meta property="og:description" content="Turn your markdown into narrated video. Local voice cloning. No cloud, no subscription.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────────────────── */
+    :root {
+      --accent:    #B45309;
+      --accent-h:  #92400E;
+      --text:      #0F0F0F;
+      --muted:     #6B7280;
+      --bg:        #FFFFFF;
+      --surface:   #F7F7F8;
+      --border:    #E4E4E7;
+      --font:      'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --max-w:     1080px;
+      --radius:    8px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --text:    #F4F4F5;
+        --muted:   #A1A1AA;
+        --bg:      #09090B;
+        --surface: #111113;
+        --border:  #27272A;
+      }
+    }
+
+    /* ─── RESET ──────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    img, video { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ─── LAYOUT ─────────────────────────────────────────────────── */
+    .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ─── NAV ────────────────────────────────────────────────────── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: transparent;
+      border-bottom: 1px solid transparent;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .nav.scrolled {
+      background: var(--bg);
+      border-color: var(--border);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 800; font-size: 1.125rem; letter-spacing: -0.02em; }
+    .nav-wordmark { height: 36px; width: auto; display: block; }
+
+    /* ─── BUTTONS ────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.6rem 1.3rem;
+      border-radius: var(--radius);
+      font-family: var(--font);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+    .btn-primary   { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn-primary:hover { background: var(--accent-h); border-color: var(--accent-h); }
+    .btn-ghost     { background: transparent; color: var(--text); border-color: var(--border); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-ghost-white { background: transparent; color: #fff; border-color: rgba(255,255,255,0.35); }
+    .btn-ghost-white:hover { border-color: #fff; }
+    .btn-lg { padding: 0.8rem 1.75rem; font-size: 1rem; }
+
+    /* ─── HERO ───────────────────────────────────────────────────── */
+    .hero {
+      padding: 7rem 0 5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-size: clamp(3rem, 6.5vw, 5.25rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+      max-width: 16ch;
+      margin-bottom: 1.5rem;
+    }
+    .hero-accent { color: var(--accent); }
+    .hero-sub {
+      font-size: 1.125rem;
+      color: var(--muted);
+      max-width: 52ch;
+      line-height: 1.65;
+      margin-bottom: 2.5rem;
+      font-weight: 400;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .hero-meta {
+      margin-top: 1.75rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .hero-meta span { margin: 0 0.4rem; opacity: 0.4; }
+
+    /* ─── STATS STRIP ────────────────────────────────────────────── */
+    .stats-strip {
+      border-bottom: 1px solid var(--border);
+      padding: 2.75rem 0;
+    }
+    .stats-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.3rem;
+      font-weight: 500;
+    }
+
+    /* ─── SECTIONS ───────────────────────────────────────────────── */
+    .section       { padding: 6rem 0; border-bottom: 1px solid var(--border); }
+    .section-alt   { padding: 6rem 0; background: var(--surface); border-bottom: 1px solid var(--border); }
+    .section-dark  { padding: 6rem 0; background: #0F0F0F; color: #FFFFFF; }
+    @media (prefers-color-scheme: dark) {
+      .section-dark { background: #1C1C1E; }
+    }
+
+    .eyebrow {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .section-dark .eyebrow { color: rgba(255,255,255,0.45); }
+
+    h2 {
+      font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+      margin-bottom: 1.25rem;
+    }
+    .section-dark h2 { color: #fff; }
+
+    .section-sub {
+      font-size: 1.0625rem;
+      color: var(--muted);
+      max-width: 58ch;
+      line-height: 1.65;
+    }
+    .section-dark .section-sub { color: rgba(255,255,255,0.5); }
+
+    /* ─── PIPELINE ───────────────────────────────────────────────── */
+    .pipeline {
+      margin-top: 3.5rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .pipeline-step {
+      padding: 1.75rem 2rem;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 3.5rem 1fr;
+      gap: 1rem;
+      align-items: start;
+    }
+    .pipeline-step:last-child { border-bottom: none; }
+    .pipeline-num {
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding-top: 0.15rem;
+    }
+    .pipeline-step h3 {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+    .pipeline-step p {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ─── AUDIENCE ───────────────────────────────────────────────── */
+    .audience-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 3.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .audience-cell {
+      padding: 2rem;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .audience-cell:nth-child(even) { border-right: none; }
+    .audience-cell:nth-last-child(-n+2) { border-bottom: none; }
+    .audience-cell h3 {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+    .audience-cell p {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    .audience-num {
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.75rem;
+    }
+
+    /* ─── DARK PULLQUOTE ─────────────────────────────────────────── */
+    .pullquote {
+      font-size: clamp(1.5rem, 3vw, 2.25rem);
+      font-weight: 700;
+      line-height: 1.3;
+      color: #fff;
+      max-width: 28ch;
+      margin-bottom: 2rem;
+      letter-spacing: -0.02em;
+    }
+    .pullquote em {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    /* ─── PRICING ────────────────────────────────────────────────── */
+    .pricing-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      max-width: 420px;
+    }
+    .price-tag {
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin: 1rem 0 0.35rem;
+    }
+    .price-tag sup { font-size: 1.5rem; vertical-align: super; }
+    .price-note {
+      font-size: 0.8125rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .price-features {
+      list-style: none;
+      margin-bottom: 2rem;
+    }
+    .price-features li {
+      font-size: 0.875rem;
+      color: var(--muted);
+      padding: 0.5rem 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+    }
+    .price-features li::before {
+      content: '\2713';
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    /* ─── WAITLIST ───────────────────────────────────────────────── */
+    .waitlist-wrap {
+      max-width: 520px;
+    }
+    .wl-form {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .wl-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .wl-field label {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .wl-field label span { font-weight: 400; color: var(--muted); }
+    .wl-field input[type="email"] {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-family: var(--font);
+      font-size: 0.9375rem;
+      background: var(--bg);
+      color: var(--text);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      transition: border-color 0.15s;
+    }
+    .wl-field input[type="email"]:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .wl-field input::placeholder { color: var(--muted); }
+    .radio-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .radio-row label {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.875rem;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .radio-row input[type="radio"] { accent-color: var(--accent); }
+    .wl-submit {
+      width: 100%;
+      padding: 0.875rem;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font);
+      font-size: 0.9375rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .wl-submit:hover:not(:disabled) { background: var(--accent-h); }
+    .wl-submit:disabled { opacity: 0.55; cursor: not-allowed; }
+    .wl-fine {
+      font-size: 0.775rem;
+      color: var(--muted);
+    }
+    .wl-success {
+      display: none;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+    .wl-success.visible { display: block; }
+    .wl-success h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .wl-success p  { font-size: 0.875rem; color: var(--muted); }
+    .wl-error {
+      display: none;
+      font-size: 0.8125rem;
+      color: #dc2626;
+    }
+    .wl-error.visible { display: block; }
+
+    /* ─── FOOTER ─────────────────────────────────────────────────── */
+    .footer {
+      padding: 3rem 0 2.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .footer-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .footer-brand {
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+    }
+    .footer-sub {
+      font-size: 0.775rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .footer-links {
+      display: flex;
+      gap: 1.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      font-size: 0.8125rem;
+      color: var(--muted);
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy {
+      max-width: var(--max-w);
+      margin: 1.5rem auto 0;
+      padding: 1.5rem 2rem 0;
+      border-top: 1px solid var(--border);
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* ─── FOCUS ──────────────────────────────────────────────────── */
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 3px;
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero       { padding: 5.5rem 0 4rem; }
+      .stats-inner { grid-template-columns: repeat(2, 1fr); }
+      .audience-grid { grid-template-columns: 1fr; }
+      .audience-cell { border-right: none; }
+      .audience-cell:nth-last-child(-n+2) { border-bottom: 1px solid var(--border); }
+      .audience-cell:last-child { border-bottom: none; }
+      .section     { padding: 4.5rem 0; }
+      .section-alt { padding: 4.5rem 0; }
+      .section-dark { padding: 4.5rem 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1     { font-size: 2.6rem; }
+      .hero-actions .btn { width: 100%; justify-content: center; }
+      .stats-inner { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    }
+
+    /* ─── OPEN SOURCE ATTRIBUTION ────────────────────────────── */
+    .oss-section { padding: 3rem 0; border-top: 1px solid var(--border); background: var(--surface); }
+    .oss-heading { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 0.6rem; }
+    .oss-sub { font-size: 0.8125rem; color: var(--muted); margin-bottom: 1.25rem; line-height: 1.6; max-width: 64ch; }
+    .oss-grid { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+    .oss-item {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.25rem 0.7rem; border: 1px solid var(--border); border-radius: 100px;
+      font-size: 0.775rem; color: var(--muted); text-decoration: none;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .oss-item:hover { color: var(--text); border-color: var(--muted); }
+    .oss-item-name { font-weight: 600; color: var(--text); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-brand"><img src="img/wordmark.svg" alt="Orator" class="nav-wordmark"></a>
+      <a href="#waitlist" class="btn btn-primary">Join the waitlist</a>
+    </div>
+  </nav>
+
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="hero-eyebrow">Local document-to-video pipeline &mdash; coming soon</span>
+      <h1>Present what you <span class="hero-accent">already</span> wrote.</h1>
+      <p class="hero-sub">
+        Orator takes your markdown documents and produces narrated, camera-ready
+        videos &mdash; in your own voice. Entirely on your machine. No cloud APIs,
+        no subscription, no recording studio.
+      </p>
+      <div class="hero-actions">
+        <a href="#waitlist" class="btn btn-primary btn-lg">Join the waitlist</a>
+        <a href="#how" class="btn btn-ghost btn-lg">How it works</a>
+      </div>
+      <p class="hero-meta">
+        $79 at launch &mdash; one-time<span>&middot;</span>Windows &middot; Mac coming soon<span>&middot;</span>GPU recommended
+      </p>
+    </div>
+  </section>
+
+
+  <!-- STATS STRIP -->
+  <div class="stats-strip">
+    <div class="stats-inner">
+      <div>
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Local &mdash; your voice never leaves your machine</div>
+      </div>
+      <div>
+        <div class="stat-num">0</div>
+        <div class="stat-label">Cloud APIs. Zero.</div>
+      </div>
+      <div>
+        <div class="stat-num">10s</div>
+        <div class="stat-label">Reference clip to clone your voice</div>
+      </div>
+      <div>
+        <div class="stat-num">1</div>
+        <div class="stat-label">Command. Markdown in, video out.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how">
+    <div class="container">
+      <span class="eyebrow">How it works</span>
+      <h2>One document.<br>One command. Done.</h2>
+      <p class="section-sub">
+        Orator reads your document, narrates it in your cloned voice, renders professional
+        slides from the same source, and composites everything into a finished MP4.
+      </p>
+
+      <div class="pipeline">
+        <div class="pipeline-step">
+          <div class="pipeline-num">01</div>
+          <div>
+            <h3>Parse</h3>
+            <p>Your .md or .qmd file is split into sections. Prose becomes narration text. Code blocks, tables, and callouts get spoken descriptions.</p>
+          </div>
+        </div>
+        <div class="pipeline-step">
+          <div class="pipeline-num">02</div>
+          <div>
+            <h3>Narrate</h3>
+            <p>Each section is synthesized in your cloned voice using a 10-second reference clip. Zero-shot &mdash; no training data, no cloud upload.</p>
+          </div>
+        </div>
+        <div class="pipeline-step">
+          <div class="pipeline-num">03</div>
+          <div>
+            <h3>Render slides</h3>
+            <p>Professional slides are generated from the same source document. Syntax-highlighted code, styled tables, accessible color palette.</p>
+          </div>
+        </div>
+        <div class="pipeline-step">
+          <div class="pipeline-num">04</div>
+          <div>
+            <h3>Compose</h3>
+            <p>Audio and slides are stitched into a final 1080p MP4 with GPU-accelerated encoding. Each slide displays for exactly the duration of its narration.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- WHO IT'S FOR -->
+  <section class="section-alt">
+    <div class="container">
+      <span class="eyebrow">Who it&rsquo;s for</span>
+      <h2>You write before<br>you present.</h2>
+      <div class="audience-grid">
+
+        <div class="audience-cell">
+          <div class="audience-num">01</div>
+          <h3>Educators &amp; course creators</h3>
+          <p>Lecture videos, tutorial walkthroughs, and training modules from the lesson notes you already have.</p>
+        </div>
+
+        <div class="audience-cell">
+          <div class="audience-num">02</div>
+          <h3>Developer advocates</h3>
+          <p>Video docs, API walkthroughs, and changelog videos from the markdown you already write.</p>
+        </div>
+
+        <div class="audience-cell">
+          <div class="audience-num">03</div>
+          <h3>Corporate L&amp;D teams</h3>
+          <p>Onboarding videos and compliance training from existing SOPs. No proprietary content leaves the machine.</p>
+        </div>
+
+        <div class="audience-cell">
+          <div class="audience-num">04</div>
+          <h3>Researchers &amp; technical writers</h3>
+          <p>Video abstracts, conference pre-recordings, and release note walkthroughs from structured documents.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- DARK SECTION -->
+  <section class="section-dark">
+    <div class="container">
+      <span class="eyebrow">Why local</span>
+      <p class="pullquote">Your voice. Your content. <em>Your machine.</em></p>
+      <p class="section-sub">
+        Every competitor in the narrated video space is cloud-only and subscription-based.
+        Orator runs entirely on your hardware. Your documents and your voice model
+        never leave your computer. For teams subject to data residency, HIPAA,
+        or internal security policies, this isn&rsquo;t a feature &mdash; it&rsquo;s a requirement.
+      </p>
+      <br><br>
+      <a href="#waitlist" class="btn btn-ghost-white">Join the waitlist &rarr;</a>
+    </div>
+  </section>
+
+
+  <!-- PRICING -->
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Pricing</span>
+      <h2>Simple. One-time. Yours.</h2>
+      <p class="section-sub" style="margin-bottom:2.5rem;">
+        Orator is currently in development. Join the waitlist to be notified at launch.
+      </p>
+      <div class="pricing-card">
+        <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);">Personal</div>
+        <div class="price-tag"><sup>$</sup>79</div>
+        <div class="price-note">one-time &nbsp;&middot;&nbsp; no subscription</div>
+        <ul class="price-features">
+          <li>Full-length narrated videos from markdown</li>
+          <li>Voice cloning from a 10-second reference clip</li>
+          <li>Professional slide rendering with custom themes</li>
+          <li>GPU-accelerated encoding (NVIDIA or Apple Silicon)</li>
+          <li>100% local &mdash; no internet after install</li>
+          <li>Windows &middot; Mac coming soon</li>
+          <li>Lifetime updates for v1.x</li>
+        </ul>
+        <a href="#waitlist" class="btn btn-primary" style="width:100%;justify-content:center;">Join the waitlist &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- WAITLIST -->
+  <section class="section-alt" id="waitlist">
+    <div class="container">
+      <div class="waitlist-wrap">
+        <span class="eyebrow">Waitlist</span>
+        <h2>Be first.</h2>
+        <p class="section-sub">
+          Join the waitlist and we&rsquo;ll notify you the moment Orator is ready.
+          No drip campaigns. No newsletters. One email: it&rsquo;s ready.
+        </p>
+
+        <div class="wl-success" id="wl-success" role="status">
+          <h3>You&rsquo;re on the list.</h3>
+          <p>We&rsquo;ll be in touch when Orator launches.</p>
+        </div>
+
+        <form class="wl-form" id="wl-form" novalidate>
+          <div class="wl-field">
+            <label for="wl-email">Email address</label>
+            <input type="email" id="wl-email" name="email" placeholder="you@example.com" required autocomplete="email">
+          </div>
+          <div class="wl-field">
+            <label>Platform preference <span>(optional)</span></label>
+            <div class="radio-row">
+              <label><input type="radio" name="platform" value="windows" checked> Windows</label>
+              <label><input type="radio" name="platform" value="mac"> Mac</label>
+            </div>
+          </div>
+          <button type="submit" class="wl-submit" id="wl-submit">Join the waitlist</button>
+          <p class="wl-error" id="wl-error" role="alert"></p>
+          <p class="wl-fine">No spam. Unsubscribe anytime.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- OPEN SOURCE ATTRIBUTION -->
+  <div class="oss-section">
+    <div class="container">
+      <p class="oss-heading">Open source software</p>
+      <p class="oss-sub">Orator is a commercial product built on open source software. We gratefully acknowledge the following projects and their contributors.</p>
+      <div class="oss-grid">
+        <a class="oss-item" href="https://github.com/SWivid/F5-TTS" target="_blank" rel="noopener"><span class="oss-item-name">F5-TTS</span><span>MIT</span></a>
+        <a class="oss-item" href="https://pytorch.org" target="_blank" rel="noopener"><span class="oss-item-name">PyTorch</span><span>BSD-3-Clause</span></a>
+        <a class="oss-item" href="https://quarto.org" target="_blank" rel="noopener"><span class="oss-item-name">Quarto</span><span>GPL-2</span></a>
+        <a class="oss-item" href="https://playwright.dev" target="_blank" rel="noopener"><span class="oss-item-name">Playwright</span><span>Apache 2.0</span></a>
+        <a class="oss-item" href="https://ffmpeg.org" target="_blank" rel="noopener"><span class="oss-item-name">FFmpeg</span><span>LGPL</span></a>
+        <a class="oss-item" href="https://numpy.org" target="_blank" rel="noopener"><span class="oss-item-name">NumPy</span><span>BSD-3-Clause</span></a>
+        <a class="oss-item" href="https://github.com/bastibe/python-soundfile" target="_blank" rel="noopener"><span class="oss-item-name">soundfile</span><span>BSD-3-Clause</span></a>
+        <a class="oss-item" href="https://click.palletsprojects.com" target="_blank" rel="noopener"><span class="oss-item-name">Click</span><span>BSD-3-Clause</span></a>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Orator</div>
+        <div class="footer-sub">A product of SIM DAD LLC</div>
+      </div>
+      <div class="footer-links">
+        <a href="https://simdadllc.com">simdadllc.com</a>
+        <a href="mailto:hello@simdadllc.com">Contact</a>
+      </div>
+    </div>
+    <p class="footer-copy">&copy; 2026 SIM DAD LLC. All rights reserved.</p>
+  </footer>
+
+
+  <script>
+    /* ── BREVO BACKEND ENDPOINT ─────────────────────────────────────
+       Set this to your own backend endpoint that calls Brevo Contacts API.
+       Leave empty to simulate success locally during development.
+    ─────────────────────────────────────────────────────────────── */
+    const BREVO_BACKEND_ENDPOINT = "https://lector-waitlist.ap-493.workers.dev";
+
+    /* ── STICKY NAV ─────────────────────────────────────────────── */
+    const nav = document.getElementById("nav");
+    window.addEventListener("scroll", () => {
+      nav.classList.toggle("scrolled", window.scrollY > 48);
+    }, { passive: true });
+
+    /* ── WAITLIST FORM ──────────────────────────────────────────── */
+    document.getElementById("wl-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const form    = e.target;
+      const btn     = document.getElementById("wl-submit");
+      const success = document.getElementById("wl-success");
+      const errEl   = document.getElementById("wl-error");
+
+      const email    = form.email.value.trim();
+      const platform = [...form.querySelectorAll('[name="platform"]')].find(r => r.checked)?.value ?? "";
+
+      errEl.textContent = "";
+      errEl.classList.remove("visible");
+
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errEl.textContent = "Please enter a valid email address.";
+        errEl.classList.add("visible");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "Joining\u2026";
+
+      if (!BREVO_BACKEND_ENDPOINT) {
+        await new Promise(r => setTimeout(r, 600));
+        form.style.display = "none";
+        success.classList.add("visible");
+        return;
+      }
+
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const payload = {
+          email,
+          listName: "orator_waitlist",
+          attributes: {
+            PLATFORM: platform,
+            PRODUCT: "Orator",
+            SOURCE: "orator-web",
+            PAGE_URL: window.location.href,
+            UTM_SOURCE: params.get("utm_source") || "",
+            UTM_MEDIUM: params.get("utm_medium") || "",
+            UTM_CAMPAIGN: params.get("utm_campaign") || ""
+          }
+        };
+
+        const res = await fetch(BREVO_BACKEND_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok && res.status !== 409) throw new Error("Request failed");
+        form.style.display = "none";
+        success.classList.add("visible");
+      } catch {
+        errEl.textContent = "Something went wrong. Please try again or email hello@simdadllc.com.";
+        errEl.classList.add("visible");
+        btn.disabled = false;
+        btn.textContent = "Join the waitlist";
+      }
+    });
+  </script>
+
+  <!-- Cookie Consent + GA4 -->
+  <div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#1C1C1E;color:#F4F4F5;padding:16px 24px;gap:16px;font-family:inherit;font-size:14px;border-top:1px solid #333;align-items:center;justify-content:space-between;">
+    <span>This site uses analytics cookies to understand how visitors use it.</span>
+    <div style="display:flex;gap:8px;flex-shrink:0;">
+      <button id="cookie-decline" style="padding:8px 16px;border:1px solid #555;background:transparent;color:#F4F4F5;border-radius:6px;cursor:pointer;font-size:14px;font-family:inherit;">Decline</button>
+      <button id="cookie-accept" style="padding:8px 16px;border:none;background:#B45309;color:#fff;border-radius:6px;cursor:pointer;font-size:14px;font-family:inherit;">Accept</button>
+    </div>
+  </div>
+  <script>
+    (function() {
+      var GA_ID = 'G-9XWYQF6RND';
+      function loadGA() {
+        if (!GA_ID) return;
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', GA_ID);
+      }
+      var banner = document.getElementById('cookie-banner');
+      var consent = localStorage.getItem('ga_consent');
+      if (consent === 'accepted') { loadGA(); }
+      else if (!consent && GA_ID) { banner.style.display = 'flex'; }
+      document.getElementById('cookie-accept').addEventListener('click', function() {
+        localStorage.setItem('ga_consent', 'accepted');
+        banner.style.display = 'none';
+        loadGA();
+      });
+      document.getElementById('cookie-decline').addEventListener('click', function() {
+        localStorage.setItem('ga_consent', 'declined');
+        banner.style.display = 'none';
+      });
+    })();
+  </script>
+</body>
+</html>
