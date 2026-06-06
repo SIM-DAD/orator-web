@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orator: Release Log</title>
+<meta name="description" content="Every major iteration of Orator, newest first. Versioned, not dated.">
+<link rel="icon" type="image/svg+xml" href="img/logo.svg">
+<meta name="theme-color" content="#B45309">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400,0;0,9..144,500,0;0,9..144,600,0;0,9..144,700,0;1,9..144,400,30;1,9..144,500,30&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --accent:#B45309; --accent-h:#92400E; --text:#0F0F0F; --muted:#6B7280;
+    --faint:#9CA3AF; --bg:#FFFFFF; --surface:#F7F7F8; --line:#E4E4E7; --spine:#E4E4E7;
+    --font:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+    --display:'Fraunces','Cormorant Garamond','Iowan Old Style',Georgia,serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --text:#F4F4F5; --muted:#A1A1AA; --faint:#71717A; --bg:#09090B; --surface:#111113; --line:#27272A; --spine:#27272A; }
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--font);color:var(--text);line-height:1.6;background-color:var(--bg);
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(180, 83, 9, 0.08), transparent 60%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='280' height='280'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    background-repeat:no-repeat, repeat;
+    background-size:100% 800px, auto;
+    background-attachment:fixed, local;}
+  a{color:inherit;text-decoration:none;}
+  img{display:block;max-width:100%;}
+  .wrap{max-width:760px;margin:0 auto;padding:0 1.75rem;}
+
+  /* header */
+  .top{padding:3.5rem 0 0;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+  .top img{height:34px;width:auto;}
+  .top .back{font-size:0.82rem;font-weight:600;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:1px;}
+  .top .back:hover{color:var(--accent);border-color:var(--accent);}
+
+  .lede{padding:2.5rem 0 1.5rem;}
+  .lede h1{font-family:var(--display);font-size:clamp(2.4rem,6vw,3.6rem);font-weight:600;letter-spacing:-0.025em;line-height:1.0;}
+  .lede h1 em{font-style:italic;color:var(--accent);font-weight:500;}
+  .lede p{font-size:1rem;color:var(--muted);margin-top:1rem;max-width:54ch;}
+  .lede .note{font-size:0.8rem;color:var(--faint);margin-top:0.5rem;}
+
+  /* timeline */
+  .log{position:relative;padding:1.5rem 0 4rem;margin-left:0.5rem;}
+  .log::before{content:"";position:absolute;left:7px;top:0;bottom:0;width:2px;background:var(--spine);}
+  .rel{position:relative;padding:0 0 2.25rem 2.5rem;}
+  .rel::before{content:"";position:absolute;left:0;top:0.35rem;width:16px;height:16px;border-radius:50%;background:var(--bg);border:2px solid var(--spine);}
+  .rel.major::before{border-color:var(--accent);box-shadow:0 0 0 4px rgba(180,83,9,0.12);}
+  .rel.latest::before{background:var(--accent);border-color:var(--accent);}
+
+  .ver{display:flex;align-items:baseline;gap:0.75rem;flex-wrap:wrap;}
+  .ver .num{font-family:var(--display);font-size:1.5rem;font-weight:600;letter-spacing:-0.01em;color:var(--text);line-height:1;}
+  .rel.major .ver .num{font-size:1.85rem;}
+  .ver .name{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.13em;color:var(--accent);}
+  .ver .tag{font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#fff;background:var(--accent);padding:0.18rem 0.5rem;border-radius:100px;}
+
+  .summary{font-family:var(--display);font-size:1.0625rem;color:var(--text);margin-top:0.6rem;line-height:1.55;max-width:56ch;}
+  .rel.major .summary{font-size:1.15rem;}
+  ul.hi{list-style:none;margin-top:0.9rem;display:grid;gap:0.4rem;max-width:60ch;}
+  ul.hi li{position:relative;padding-left:1.1rem;font-size:0.9rem;color:var(--muted);line-height:1.55;}
+  ul.hi li::before{content:"";position:absolute;left:0;top:0.6rem;width:5px;height:5px;border-radius:50%;background:var(--accent);}
+
+  .foot{border-top:1px solid var(--line);padding:2rem 0 3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+  .foot .brand{font-weight:800;letter-spacing:-0.02em;}
+  .foot .links{display:flex;gap:1.5rem;flex-wrap:wrap;}
+  .foot a{font-size:0.8125rem;color:var(--muted);}
+  .foot a:hover{color:var(--text);}
+
+  @media (max-width:560px){ .rel{padding-left:2rem;} }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header class="top">
+      <a href="/">
+        <picture>
+          <source srcset="img/wordmark-F4F4F5.svg" media="(prefers-color-scheme: dark)">
+          <img src="img/wordmark-B45309.svg" alt="Orator">
+        </picture>
+      </a>
+      <a href="/" class="back">&larr; Back to Orator</a>
+    </header>
+
+    <section class="lede">
+      <h1>Release <em>log</em>.</h1>
+      <p>Every major iteration of Orator, newest first. Orator is still in active development, so the latest version is a pre-release. We version what we build and keep working within the version line.</p>
+      <p class="note">Versioned, not dated. The number is the reference.</p>
+    </section>
+
+    <div class="log">
+
+      <article class="rel major latest">
+        <div class="ver"><span class="num">0.6.0</span><span class="name">Theme gallery</span><span class="tag">Latest</span></div>
+        <p class="summary">A full gallery of distinct, professional slide themes, each checked for accessible contrast.</p>
+        <ul class="hi">
+          <li>Ten distinct presentation themes plus a clean plain baseline, so your videos do not all look alike.</li>
+          <li>Editorial and Swiss typographic styles join the set, each visually its own.</li>
+          <li>Every theme self-tests against WCAG AA contrast before it can ship a slide.</li>
+        </ul>
+      </article>
+
+      <article class="rel major">
+        <div class="ver"><span class="num">0.5.0</span><span class="name">The design system</span></div>
+        <p class="summary">Slides stopped being an afterthought and became a real design system.</p>
+        <ul class="hi">
+          <li>A structured slide model turns each section of your document into a deliberate layout instead of a wall of text.</li>
+          <li>Built-in writing checks trim cliches, redundancy, and overlong headlines as slides are generated.</li>
+          <li>A theme contract and registry keep every theme consistent and accessible by construction.</li>
+        </ul>
+      </article>
+
+      <article class="rel major">
+        <div class="ver"><span class="num">0.4.0</span><span class="name">Slides that cite their sources</span></div>
+        <p class="summary">Slides gained real structure and properly credited imagery.</p>
+        <ul class="hi">
+          <li>A clear authoring format for terms, definitions, and section frames, validated before any video is built.</li>
+          <li>A licensed-image pipeline that pulls from open sources and embeds the correct credit automatically.</li>
+          <li>Accessible term-and-definition slide templates with readable type and color-safe palettes.</li>
+        </ul>
+      </article>
+
+      <article class="rel major">
+        <div class="ver"><span class="num">0.3.0</span><span class="name">Speaks it right</span></div>
+        <p class="summary">The narration learned to pronounce the hard parts.</p>
+        <ul class="hi">
+          <li>A phonetics layer so acronyms and technical terms are spoken naturally instead of spelled out wrong.</li>
+          <li>Long documents split cleanly into per-section micro-lectures with a batch renderer.</li>
+        </ul>
+      </article>
+
+      <article class="rel major">
+        <div class="ver"><span class="num">0.2.0</span><span class="name">The pipeline</span></div>
+        <p class="summary">The four-stage path from document to finished video came together.</p>
+        <ul class="hi">
+          <li>Parse your markdown into sections, narrate each in your cloned voice, render slides from the same source, and compose a final MP4.</li>
+          <li>Each slide holds for exactly the length of its narration.</li>
+        </ul>
+      </article>
+
+      <article class="rel major">
+        <div class="ver"><span class="num">0.1.0</span><span class="name">First build</span></div>
+        <p class="summary">Where it began.</p>
+        <ul class="hi"><li>Initial scaffolding for a local document-to-video tool: your voice, your content, your machine.</li></ul>
+      </article>
+
+    </div>
+
+    <footer class="foot">
+      <div class="brand">Orator</div>
+      <div class="links">
+        <a href="/">Home</a>
+        <a href="https://simdadllc.com/commitment.html">Our commitment</a>
+        <a href="https://simdadllc.com">SIM DAD LLC</a>
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>
