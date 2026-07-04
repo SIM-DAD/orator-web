@@ -13,7 +13,7 @@
       }
 
       .st0, .st1, .st2, .st3, .st4 {
-        stroke: #92400e;
+        stroke: #9E4F7C;
       }
 
       .st0, .st1, .st4 {
@@ -29,7 +29,7 @@
       }
 
       .st2, .st3 {
-        fill: #92400e;
+        fill: #9E4F7C;
       }
 
       .st2, .st3, .st4 {

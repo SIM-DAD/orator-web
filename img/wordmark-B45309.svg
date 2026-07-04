@@ -8,7 +8,7 @@
       }
 
       .st0, .st1, .st2, .st3, .st4 {
-        stroke: #b45309;
+        stroke: #CC79A7;
       }
 
       .st0, .st2, .st3 {
@@ -16,7 +16,7 @@
       }
 
       .st0, .st3, .st5 {
-        fill: #b45309;
+        fill: #CC79A7;
       }
 
       .st1 {
