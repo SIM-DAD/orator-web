@@ -43,7 +43,9 @@
     /* ─── TOKENS ─────────────────────────────────────────────────── */
     :root {
       --accent:    #CC79A7;
-      --accent-h:  #9E4F7C;
+      --accent-h:  #7B3E61;
+    /* Text-safe accent: 5.44:1 on white. The bright --accent is for large display and dark sections only. */
+    --accent-ink: #9E4F7C;
       --text:      #0F0F0F;
       --muted:     #6B7280;
       --bg:        #FFFFFF;
@@ -150,10 +152,10 @@
       transition: all 0.15s;
       text-decoration: none;
     }
-    .btn-primary   { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn-primary   { background: var(--accent-ink); color: #fff; border-color: var(--accent-ink); }
     .btn-primary:hover { background: var(--accent-h); border-color: var(--accent-h); }
     .btn-ghost     { background: transparent; color: var(--text); border-color: var(--border); }
-    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-ghost:hover { border-color: var(--accent-ink); color: var(--accent-ink); }
     .btn-ghost-white { background: transparent; color: #fff; border-color: rgba(255,255,255,0.35); }
     .btn-ghost-white:hover { border-color: #fff; }
     .btn-lg { padding: 0.8rem 1.75rem; font-size: 1rem; }
@@ -250,7 +252,7 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      color: var(--accent);
+      color: var(--accent-ink);
       margin-bottom: 1rem;
     }
     .section-dark .eyebrow { color: rgba(255,255,255,0.45); }
@@ -407,7 +409,7 @@
     }
     .price-features li::before {
       content: '\2713';
-      color: var(--accent);
+      color: var(--accent-ink);
       font-size: 0.75rem;
       font-weight: 800;
       flex-shrink: 0;
@@ -576,9 +578,9 @@
     .manuscript { max-width: 720px; margin: 0 auto; padding: 0 2rem; font-family: var(--font-display); color: var(--text); }
     .manuscript p { font-size: 1.1875rem; line-height: 1.7; margin: 0 0 1.4rem; color: var(--text); }
     .manuscript em { font-style: italic; }
-    .manuscript strong { font-weight: 600; color: var(--accent); font-style: italic; }
-    .manuscript a { color: var(--accent); border-bottom: 1px solid var(--border); transition: border-color 0.15s; }
-    .manuscript a:hover { border-color: var(--accent); }
+    .manuscript strong { font-weight: 600; color: var(--accent-ink); font-style: italic; }
+    .manuscript a { color: var(--accent-ink); border-bottom: 1px solid var(--border); transition: border-color 0.15s; }
+    .manuscript a:hover { border-color: var(--accent-ink); }
 
     .issue-marker {
       max-width: 720px; margin: 4rem auto 3rem; padding: 0 2rem;
@@ -663,7 +665,7 @@
     }
     .colophon-price {
       font-family: var(--font-display); font-size: 2.25rem; font-weight: 600;
-      color: var(--accent); letter-spacing: -0.02em;
+      color: var(--accent-ink); letter-spacing: -0.02em;
     }
     .colophon-price sup { font-size: 1.2rem; vertical-align: super; padding-right: 0.1em; }
     .colophon p {
