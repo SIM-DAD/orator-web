@@ -1,0 +1,376 @@
+/* Orator site styles. Restyle 2026-10-15 against the design brief
+   (m4:/Volumes/One Touch/30-llc/SIM-DAD/site-copy/DESIGN-BRIEFS-2026-10-15.md, section 5).
+   The page is a presenter view: slides on the classroom screen, the script beside them,
+   and a narration track under the opening slide. */
+
+/* Atkinson Hyperlegible Next, self-hosted (@fontsource-variable 5.3.0, OFL; see /fonts/). */
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("/fonts/atkinson-hyperlegible-next-latin-wght-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  font-style: italic;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("/fonts/atkinson-hyperlegible-next-latin-wght-italic.woff2") format("woff2");
+}
+
+:root {
+  color-scheme: light dark;
+  --slate: #1D2633;       /* the classroom screen */
+  --paper: #FFFFFF;       /* the script page */
+  --ink: #1D2633;         /* script text is set in the screen's slate */
+  --track: #E6E9EE;       /* the timeline lane */
+  --tick: #8A93A0;
+  --signal: #CC79A7;      /* Orator's wordmark color: waveform, playhead, accents on slate */
+  --signal-ink: #964A75;  /* text-safe signal on paper */
+  --signal-ink-h: #7B3E61;
+  --on-signal-ink: #FFFFFF;
+  --muted: #4F5866;
+  --rule: #CDD2D9;
+  --screen-text: #FFFFFF;
+  --screen-muted: #B7C0CC;
+  --screen-edge: #1D2633;
+  --font: "Atkinson Hyperlegible Next", "Segoe UI", system-ui, sans-serif;
+  --measure: 62ch;
+  --wide: 1120px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0F1319;
+    --ink: #E8ECF1;
+    --track: #1A2029;
+    --tick: #5D6878;
+    --signal-ink: #E4A9CA;
+    --signal-ink-h: #F0C6DD;
+    --on-signal-ink: #1D2633;
+    --muted: #A9B2BF;
+    --rule: #2C3440;
+    --screen-edge: #3A4555;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 1.125rem;
+  line-height: 1.6;
+  font-variant-numeric: lining-nums;
+  -webkit-font-smoothing: antialiased;
+}
+img, video, svg { display: block; max-width: 100%; }
+h1, h2, h3, p, ul, ol, blockquote { margin: 0; }
+a { color: var(--signal-ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { color: var(--signal-ink-h); text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--signal-ink); outline-offset: 3px; border-radius: 2px; }
+
+.skip {
+  position: absolute; left: -9999px; top: 0;
+}
+.skip:focus {
+  left: 1rem; top: 1rem; position: fixed; z-index: 200;
+  background: var(--paper); color: var(--ink);
+  padding: 0.6rem 1rem; border: 2px solid var(--signal-ink);
+}
+
+.wrap { max-width: var(--wide); margin: 0 auto; padding: 0 1.25rem; }
+@media (min-width: 768px) { .wrap { padding: 0 2rem; } }
+
+/* ── Nav ──────────────────────────────────────────────── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--paper);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.nav.scrolled { border-color: var(--rule); }
+.nav-inner {
+  max-width: var(--wide); margin: 0 auto; padding: 0 1.25rem;
+  height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+}
+@media (min-width: 768px) { .nav-inner { padding: 0 2rem; } }
+.nav-brand { display: block; text-decoration: none; }
+.nav-wordmark { height: 32px; width: auto; }
+
+/* ── Buttons ──────────────────────────────────────────── */
+.btn, .wl-submit, .beta-form button {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px; padding: 0.55rem 1.15rem;
+  font: 700 1rem/1.2 var(--font);
+  color: var(--on-signal-ink); background: var(--signal-ink);
+  border: 2px solid var(--signal-ink); border-radius: 4px;
+  text-decoration: none; cursor: pointer;
+  transition: background-color 0.12s, border-color 0.12s;
+}
+.btn:hover, .wl-submit:hover:not(:disabled), .beta-form button:hover:not(:disabled) {
+  color: var(--on-signal-ink); background: var(--signal-ink-h); border-color: var(--signal-ink-h);
+}
+.btn:active, .wl-submit:active, .beta-form button:active { transform: translateY(1px); }
+.wl-submit:disabled, .beta-form button:disabled { opacity: 0.6; cursor: progress; }
+
+/* ── The slide (classroom screen) ─────────────────────── */
+.slide {
+  position: relative;
+  display: flex; flex-direction: column;
+  background: var(--slate); color: var(--screen-text);
+  border: 1px solid var(--screen-edge);
+  border-radius: 6px;
+  padding: 1.25rem 1.25rem 1.5rem;
+}
+@media (min-width: 768px) {
+  .slide { aspect-ratio: 16 / 9; padding: clamp(1.5rem, 3.2vw, 3rem); }
+}
+.slide-head {
+  display: flex; flex-wrap: wrap; column-gap: 1.5rem; row-gap: 0.15rem;
+  font-size: 0.9375rem; color: var(--screen-muted);
+  padding-bottom: 0.75rem; border-bottom: 1px solid #3A4555;
+}
+.slide-head span:first-child { color: var(--screen-text); font-weight: 700; }
+.slide-body { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 2rem 0 0.5rem; }
+.slide h1 {
+  font-weight: 800;
+  font-size: clamp(2.5rem, 7.2vw, 5.25rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  max-width: 14ch;
+}
+.slide-sub {
+  margin-top: 1.5rem;
+  display: flex; flex-direction: column; gap: 0.1rem;
+  font-size: clamp(1.0625rem, 1.6vw, 1.375rem);
+  color: var(--screen-muted);
+}
+.slide-sub span:first-child { color: var(--screen-text); }
+
+/* The narration track under the opening slide. Decorative: it carries no text. */
+.track {
+  position: relative;
+  margin-top: 0.75rem;
+  background: var(--track);
+  border-radius: 4px;
+  padding: 0.85rem 0.85rem 0.6rem;
+  overflow: hidden;
+}
+.track-clips { display: flex; gap: 6px; height: 44px; }
+.track-clip { flex: var(--w) 1 0; min-width: 0; color: var(--signal); }
+.track-clip svg { width: 100%; height: 44px; }
+.track-ruler {
+  margin-top: 0.5rem; height: 8px;
+  background-image: repeating-linear-gradient(to right, var(--tick) 0 1px, transparent 1px 24px);
+}
+.playhead {
+  position: absolute; top: 0; bottom: 0; left: 0.85rem; width: 2px;
+  background: var(--slate);
+  animation: playhead 3.2s cubic-bezier(0.45, 0, 0.25, 1) 0.4s both;
+}
+.playhead::before {
+  content: ""; position: absolute; top: 0; left: -5px;
+  border: 6px solid transparent; border-top: 8px solid var(--slate);
+}
+@media (prefers-color-scheme: dark) {
+  .playhead { background: var(--signal-ink); }
+  .playhead::before { border-top-color: var(--signal-ink); }
+}
+@keyframes playhead {
+  from { left: 0.85rem; }
+  to   { left: calc(100% - 0.85rem - 2px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .playhead { animation: none; left: calc(100% - 0.85rem - 2px); }
+}
+
+/* ── Opening and script ───────────────────────────────── */
+.opening { padding-top: 1.5rem; }
+.script { max-width: var(--measure); }
+.script p + p { margin-top: 1.1rem; }
+.script strong { font-weight: 800; }
+.lede-block { padding: 3rem 0 1rem; }
+.lede { font-size: clamp(1.25rem, 2vw, 1.4375rem); line-height: 1.5; }
+.lede + p { margin-top: 1.4rem; }
+
+.part {
+  display: grid; gap: 1.5rem;
+  padding: 3.5rem 0;
+  border-top: 1px solid var(--rule);
+}
+.part:first-of-type { border-top: 0; }
+@media (min-width: 960px) {
+  .part { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 3.5rem; align-items: start; padding: 4.5rem 0; }
+  .part .slide { position: sticky; top: 88px; }
+}
+.part .slide { padding: 1.25rem 1.4rem; }
+@media (max-width: 959px) { .part .slide { aspect-ratio: auto; } }
+@media (min-width: 768px) { .part .slide { padding: 1.5rem 1.75rem; } }
+.part .slide-no { font-size: 0.9375rem; color: var(--screen-muted); padding-bottom: 0.6rem; border-bottom: 1px solid #3A4555; }
+.part .slide h2 {
+  flex: 1; display: flex; align-items: center;
+  padding-top: 1rem;
+  font-weight: 800; font-size: clamp(1.75rem, 3vw, 2.375rem); line-height: 1.08; letter-spacing: -0.015em;
+}
+.part .script { padding-top: 0.25rem; }
+
+/* The pull quote, set as a burned-in caption: the narration made visible. */
+.caption {
+  margin: 1rem 0 0; padding: 4rem 0;
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  text-align: center;
+}
+.caption blockquote {
+  display: inline;
+  font-size: clamp(1.375rem, 3vw, 2.125rem); font-weight: 700; line-height: 1.6;
+  background: #000000; color: #FFFFFF;
+  padding: 0.2em 0.55em;
+  box-shadow: 0 0 0 1px var(--screen-edge);
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+
+/* End card: the credits after the last slide. */
+.endcard {
+  display: flex; align-items: center; gap: 1.25rem;
+  padding: 3rem 0;
+}
+.endcard img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; }
+.endcard-lines { display: flex; flex-direction: column; font-size: 0.9375rem; color: var(--muted); line-height: 1.45; }
+.endcard-lines span:first-child { color: var(--ink); font-weight: 700; }
+
+/* ── Pricing: two ruled rows, like a render settings sheet ── */
+.pricing { padding: 4rem 0 1rem; border-top: 1px solid var(--rule); }
+.price-row {
+  display: grid; gap: 0.5rem 2rem;
+  padding: 1.75rem 0; border-bottom: 1px solid var(--rule);
+}
+@media (min-width: 768px) {
+  .price-row { grid-template-columns: 16rem minmax(0, 1fr); }
+}
+.price-label { display: flex; flex-direction: column; }
+.price-label span:first-child { font-weight: 800; font-size: 1.25rem; }
+.price-label span + span { color: var(--muted); font-size: 0.9375rem; }
+.price {
+  font-weight: 800; font-size: clamp(2.75rem, 5vw, 3.5rem); line-height: 1;
+  font-variant-numeric: tabular-nums; letter-spacing: -0.02em; margin-top: 0.75rem;
+}
+.price sup { font-size: 0.45em; vertical-align: 0.9em; font-weight: 700; padding-right: 0.05em; }
+.price-detail { max-width: var(--measure); }
+.price-detail > * + * { margin-top: 0.75rem; }
+.terms { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.35rem 0.5rem; }
+.terms li {
+  font-size: 0.9375rem; padding: 0.2rem 0.6rem; border: 1px solid var(--rule); border-radius: 4px;
+}
+.features { padding-left: 1.2rem; }
+.features li + li { margin-top: 0.3rem; }
+.features li::marker { color: var(--signal-ink); }
+
+/* ── Waitlist ─────────────────────────────────────────── */
+.waitlist { padding: 4rem 0 5rem; }
+.waitlist h2 { font-weight: 800; font-size: clamp(2rem, 4vw, 2.75rem); line-height: 1.1; margin-bottom: 1rem; }
+.waitlist-intro { max-width: var(--measure); color: var(--muted); margin-bottom: 2rem; }
+.wl-form { max-width: 34rem; display: grid; gap: 1.25rem; }
+.wl-field { display: grid; gap: 0.4rem; }
+.wl-field > label { font-weight: 700; }
+.wl-field label span { font-weight: 400; color: var(--muted); }
+.wl-field input[type="email"], .beta-form input, .beta-form textarea {
+  width: 100%; min-height: 48px; padding: 0.65rem 0.8rem;
+  font: inherit; color: var(--ink); background: var(--paper);
+  border: 2px solid var(--muted); border-radius: 4px;
+}
+.wl-field input[type="email"]:focus-visible, .beta-form input:focus-visible, .beta-form textarea:focus-visible {
+  outline: 3px solid var(--signal-ink); outline-offset: 1px; border-color: var(--ink);
+}
+.wl-field input::placeholder { color: var(--muted); opacity: 1; }
+.radio-row label { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 400; }
+.radio-row input[type="radio"] { width: 1.15rem; height: 1.15rem; accent-color: var(--signal-ink); }
+.wl-submit { justify-self: start; }
+.wl-fine { font-size: 0.9375rem; color: var(--muted); }
+.wl-success { display: none; max-width: 34rem; padding: 1rem 1.25rem; border: 2px solid var(--signal-ink); border-radius: 4px; margin-bottom: 1.5rem; }
+.wl-success.visible { display: block; }
+.wl-success h3 { font-size: 1.125rem; font-weight: 800; margin-bottom: 0.25rem; }
+.wl-success p { color: var(--muted); }
+.wl-error { display: none; color: var(--ink); font-weight: 700; padding-left: 0.75rem; border-left: 4px solid var(--signal-ink); }
+.wl-error.visible { display: block; }
+
+/* ── Practice, open source, footer ────────────────────── */
+.practice { border-top: 1px solid var(--rule); padding: 4rem 0; }
+.practice-inner { max-width: var(--measure); }
+.practice-label { font-size: 1rem; color: var(--muted); margin-bottom: 0.5rem; }
+.practice h2 { font-weight: 800; font-size: clamp(1.625rem, 3vw, 2rem); line-height: 1.15; margin-bottom: 1rem; }
+.practice p + p { margin-top: 1rem; }
+.practice-cta { color: var(--muted); }
+
+.oss { border-top: 1px solid var(--rule); padding: 3rem 0; }
+.oss h2 { font-size: 1.125rem; font-weight: 800; margin-bottom: 0.4rem; }
+.oss-sub { font-size: 0.9375rem; color: var(--muted); max-width: var(--measure); margin-bottom: 1.25rem; }
+.oss-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.oss-item {
+  display: inline-flex; gap: 0.5rem; align-items: baseline;
+  padding: 0.35rem 0.7rem; min-height: 36px;
+  font-size: 0.9375rem; color: var(--muted); text-decoration: none;
+  border: 1px solid var(--rule); border-radius: 4px;
+}
+.oss-item:hover { color: var(--ink); border-color: var(--muted); }
+.oss-item-name { font-weight: 700; color: var(--ink); }
+
+.footer { border-top: 1px solid var(--rule); padding: 2.5rem 0 3rem; font-size: 0.9375rem; }
+.footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1.5rem; }
+.footer-brand { font-weight: 800; font-size: 1.125rem; }
+.footer-sub { color: var(--muted); }
+.footer-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; align-items: center; }
+.footer-links a { color: var(--ink); }
+.footer-copy { margin-top: 1.5rem; color: var(--muted); font-size: 0.875rem; }
+
+/* ── Secondary pages (beta, release log) ─────────────── */
+.page { padding-top: 2.5rem; padding-bottom: 4rem; }
+.page-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.5rem 0 0; }
+.page-head img { height: 32px; width: auto; }
+.page .slide { margin: 1.5rem 0 2rem; }
+@media (min-width: 768px) { .page .slide { aspect-ratio: auto; min-height: 12rem; } }
+.page .slide h1 { font-size: clamp(2.25rem, 5vw, 3.5rem); max-width: 18ch; }
+.page .slide .slide-body { padding-top: 1rem; }
+.page .slide-sub { margin-top: 1rem; }
+.status { font-size: 0.9375rem; color: var(--screen-muted); }
+
+/* Beta form */
+.beta { max-width: 40rem; }
+.beta ul { padding-left: 1.2rem; margin-bottom: 1.5rem; }
+.beta ul li::marker { color: var(--signal-ink); }
+.beta hr { border: 0; border-top: 1px solid var(--rule); margin: 2rem 0; }
+.beta-form label { display: block; font-weight: 700; margin: 1.25rem 0 0.4rem; }
+.beta-form .hint { display: block; font-weight: 400; color: var(--muted); font-size: 0.9375rem; }
+.beta-form textarea { min-height: 6rem; resize: vertical; }
+.beta-form button { margin-top: 1.75rem; }
+.fine { color: var(--muted); font-size: 0.9375rem; margin-top: 0.85rem; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.msg { padding: 0.9rem 1rem; border: 2px solid var(--signal-ink); border-radius: 4px; margin-bottom: 1.5rem; }
+[hidden] { display: none !important; }
+
+/* Release log: entries sit on a vertical timeline track */
+.log { position: relative; margin: 1rem 0 3rem; padding-left: 2.25rem; max-width: var(--measure); }
+.log::before {
+  content: ""; position: absolute; left: 0; top: 0.4rem; bottom: 0; width: 14px;
+  background: var(--track);
+  background-image: repeating-linear-gradient(to bottom, var(--tick) 0 1px, transparent 1px 18px);
+  background-size: 6px 100%; background-repeat: no-repeat; background-position: 4px 0;
+  border-radius: 3px;
+}
+.rel { position: relative; padding-bottom: 2rem; }
+.rel::before {
+  content: ""; position: absolute; left: -2.25rem; top: 0.45rem; width: 14px; height: 14px;
+  background: var(--signal); border-radius: 2px;
+}
+.ver .name { font-weight: 800; font-size: 1.25rem; }
+.summary { margin-top: 0.5rem; }
+ul.hi { margin-top: 0.85rem; padding-left: 1.2rem; color: var(--muted); }
+ul.hi li::marker { color: var(--signal-ink); }
+.log-intro { max-width: var(--measure); }
+.log-intro p + p { margin-top: 0.75rem; }
+.log-intro .note { color: var(--muted); font-size: 0.9375rem; }
+.wl-set { border: 0; padding: 0; margin: 0; }
+.wl-set legend { font-weight: 700; padding: 0; margin-bottom: 0.4rem; }
+.wl-set legend span { font-weight: 400; color: var(--muted); }
