@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Orator: Present what you already wrote.</title>
   <link rel="icon" type="image/svg+xml" href="img/logo.svg">
-  <meta name="description" content="Orator turns markdown documents into narrated, camera-ready videos using local voice cloning. No cloud. No subscription. Your voice, your machine.">
+  <meta name="description" content="Orator turns markdown documents into narrated, camera-ready videos with local text-to-speech. No cloud. No subscription. Your words, your machine.">
   <meta property="og:title" content="Orator: Present what you already wrote.">
-  <meta property="og:description" content="Turn your markdown into narrated video. Local voice cloning. No cloud, no subscription.">
+  <meta property="og:description" content="Turn your markdown into narrated video. Local text-to-speech. No cloud, no subscription.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://useorator.app/img/social-share.png">
   <meta property="og:url" content="https://useorator.app">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Orator. Present what you already wrote.">
-  <meta name="twitter:description" content="Turn your markdown into narrated video. Local voice cloning. No cloud, no subscription.">
+  <meta name="twitter:description" content="Turn your markdown into narrated video. Local text-to-speech. No cloud, no subscription.">
   <meta name="twitter:image" content="https://useorator.app/img/social-share.png">
   <link rel="canonical" href="https://useorator.app/">
   <meta name="author" content="SIM DAD LLC">
@@ -23,7 +23,7 @@
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "Orator",
-    "description": "Local document-to-video pipeline: turns markdown documents into narrated, camera-ready videos using on-device voice cloning. No cloud. No subscription.",
+    "description": "Local document-to-video pipeline: turns markdown documents into narrated, camera-ready videos with on-device text-to-speech. No cloud. No subscription.",
     "url": "https://useorator.app",
     "applicationCategory": "MultimediaApplication",
     "operatingSystem": "Windows 10, Windows 11",
@@ -44,10 +44,10 @@
     :root {
       --accent:    #CC79A7;
       --accent-h:  #7B3E61;
-    /* Text-safe accent: 5.44:1 on white. The bright --accent is for large display and dark sections only. */
-    --accent-ink: #9E4F7C;
+    /* Text-safe accent: 5.9:1 on white. The bright --accent is for large display and dark sections only. */
+    --accent-ink: #964A75;
       --text:      #0F0F0F;
-      --muted:     #6B7280;
+      --muted:     #586070;
       --bg:        #FFFFFF;
       --surface:   #F7F7F8;
       --border:    #E4E4E7;
@@ -60,6 +60,7 @@
     @media (prefers-color-scheme: dark) {
       :root {
         --text:    #F4F4F5;
+        --accent-ink: #CC79A7;
         --muted:   #A1A1AA;
         --bg:      #09090B;
         --surface: #111113;
@@ -188,7 +189,7 @@
       max-width: 16ch;
       margin-bottom: 1.5rem;
     }
-    .hero-accent { color: var(--accent); font-style: italic; font-weight: 500; }
+    .hero-accent { color: var(--accent-ink); font-style: italic; font-weight: 500; }
     .hero-sub {
       font-size: 1.125rem;
       color: var(--muted);
@@ -227,7 +228,7 @@
       font-family: var(--font-display);
       font-size: 2.5rem;
       font-weight: 600;
-      color: var(--accent);
+      color: var(--accent-ink);
       letter-spacing: -0.025em;
       line-height: 1;
     }
@@ -267,7 +268,7 @@
     }
     h2 em {
       font-style: italic;
-      color: var(--accent);
+      color: var(--accent-ink);
       font-weight: 500;
     }
     .section-dark h2 { color: #fff; }
@@ -303,7 +304,7 @@
     .pipeline-num {
       font-size: 0.7rem;
       font-weight: 800;
-      color: var(--accent);
+      color: var(--accent-ink);
       text-transform: uppercase;
       letter-spacing: 0.1em;
       padding-top: 0.15rem;
@@ -352,7 +353,7 @@
     .audience-num {
       font-size: 0.7rem;
       font-weight: 800;
-      color: var(--accent);
+      color: var(--accent-ink);
       text-transform: uppercase;
       letter-spacing: 0.1em;
       margin-bottom: 0.75rem;
@@ -369,7 +370,7 @@
       letter-spacing: -0.02em;
     }
     .pullquote em {
-      color: var(--accent);
+      color: var(--accent-ink);
       font-style: normal;
     }
 
@@ -449,7 +450,7 @@
     }
     .wl-field input[type="email"]:focus {
       outline: none;
-      border-color: var(--accent);
+      border-color: var(--accent-ink);
     }
     .wl-field input::placeholder { color: var(--muted); }
     .radio-row {
@@ -465,11 +466,11 @@
       color: var(--muted);
       cursor: pointer;
     }
-    .radio-row input[type="radio"] { accent-color: var(--accent); }
+    .radio-row input[type="radio"] { accent-color: var(--accent-ink); }
     .wl-submit {
       width: 100%;
       padding: 0.875rem;
-      background: var(--accent);
+      background: var(--accent-ink);
       color: #fff;
       border: none;
       border-radius: var(--radius);
@@ -574,7 +575,7 @@
       .stats-inner { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
     }
 
-    /* ═══ MANUSCRIPT LAYOUT — film-treatment register ═══ */
+    /* ═══ MANUSCRIPT LAYOUT: film-treatment register ═══ */
     .manuscript { max-width: 720px; margin: 0 auto; padding: 0 2rem; font-family: var(--font-display); color: var(--text); }
     .manuscript p { font-size: 1.1875rem; line-height: 1.7; margin: 0 0 1.4rem; color: var(--text); }
     .manuscript em { font-style: italic; }
@@ -597,7 +598,7 @@
       font-family: var(--font-display); font-size: clamp(3.5rem, 10vw, 8rem);
       font-weight: 500; line-height: 0.92; letter-spacing: -0.045em; margin: 0; color: var(--text);
     }
-    .opening h1 em { font-style: italic; font-weight: 400; color: var(--accent); }
+    .opening h1 em { font-style: italic; font-weight: 400; color: var(--accent-ink); }
     .opening .byline {
       font-family: var(--font); font-size: 0.78rem; letter-spacing: 0.1em;
       text-transform: uppercase; color: var(--muted); margin-top: 2rem;
@@ -608,7 +609,7 @@
       font-family: var(--font-display);
       float: left; font-size: 5.6em; line-height: 0.85;
       padding: 0.05em 0.12em 0 0;
-      font-weight: 600; color: var(--accent); font-style: italic;
+      font-weight: 600; color: var(--accent-ink); font-style: italic;
     }
     .lede-opener { font-variant: small-caps; letter-spacing: 0.05em; font-weight: 500; }
 
@@ -616,24 +617,24 @@
     .section-marker { max-width: 720px; margin: 4.5rem auto 1.5rem; padding: 0 2rem; text-align: center; }
     .section-marker .numeral {
       font-family: var(--font); font-size: 0.72rem; font-weight: 700;
-      color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--accent-ink); letter-spacing: 0.2em; text-transform: uppercase;
       display: inline-block; margin-bottom: 0.65rem;
     }
     .section-marker .heading {
       font-family: var(--font-display); font-size: 2.1rem; font-weight: 600;
       letter-spacing: -0.02em; line-height: 1.05; color: var(--text);
     }
-    .section-marker .heading em { font-style: italic; color: var(--accent); font-weight: 500; }
+    .section-marker .heading em { font-style: italic; color: var(--accent-ink); font-weight: 500; }
 
     .pull-quote {
       max-width: 720px; margin: 3.5rem auto; padding: 2rem 2rem 2rem 3.5rem;
       font-family: var(--font-display); font-size: clamp(1.7rem, 3.6vw, 2.4rem);
       font-style: italic; font-weight: 500; line-height: 1.25; letter-spacing: -0.02em;
-      color: var(--accent); border-left: 3px solid var(--accent); position: relative;
+      color: var(--accent-ink); border-left: 3px solid var(--accent); position: relative;
     }
     .pull-quote::before {
       content: "“"; position: absolute; left: 1.2rem; top: 0.5rem;
-      font-size: 4rem; color: var(--accent); opacity: 0.35; line-height: 1;
+      font-size: 4rem; color: var(--accent-ink); opacity: 0.35; line-height: 1;
       font-family: var(--font-display);
     }
 
@@ -641,7 +642,7 @@
     .ornament {
       max-width: 720px; margin: 3.5rem auto 1.5rem; padding: 0 2rem; text-align: center;
       font-family: var(--font-display); font-size: 1.6rem; font-style: italic;
-      color: var(--accent); opacity: 0.6;
+      color: var(--accent-ink); opacity: 0.6;
     }
     .signature {
       max-width: 720px; margin: 0 auto 5rem; padding: 0 2rem;
@@ -678,7 +679,7 @@
       font-family: var(--font-display); font-size: 2rem; font-weight: 600;
       letter-spacing: -0.02em; margin-bottom: 0.75rem;
     }
-    .end-waitlist .heading em { font-style: italic; color: var(--accent); font-weight: 500; }
+    .end-waitlist .heading em { font-style: italic; color: var(--accent-ink); font-weight: 500; }
 
     @media (max-width: 720px) {
       .opening h1 { font-size: clamp(2.8rem, 13vw, 4.5rem); }
@@ -713,6 +714,15 @@
     .practice-cta { color: var(--muted); }
     .practice-cta a { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 2px; }
     .practice-cta a:hover { text-decoration-thickness: 2px; }
+    /* 5:1 floor: the small tracked labels measure below the floor in the muted gray even at 6.3:1 declared,
+       so they take a darker ink in light mode and keep the muted token in dark mode. */
+    .issue-marker, .opening .byline, .colophon-label { color: #4B5563; }
+    @media (prefers-color-scheme: dark) {
+      .issue-marker, .opening .byline, .colophon-label { color: var(--muted); }
+      /* dark mode: the bright accent carries the button, so the label goes dark */
+      .btn-primary, .wl-submit { background: var(--accent-ink); color: #09090B; border-color: var(--accent-ink); }
+      .btn-primary:hover, .wl-submit:hover:not(:disabled) { background: var(--accent-ink); filter: brightness(1.08); }
+    }
 </style>
 </head>
 <body>
@@ -732,36 +742,36 @@
 
 
   <!-- ISSUE MARKER -->
-  <div class="issue-marker">Orator &middot; A treatment &middot; July 2026</div>
+  <div class="issue-marker">Orator &middot; A treatment &middot; October 2026</div>
 
 
   <!-- OPENING -->
   <header class="opening">
     <h1>Present what<br>you <em>already</em> wrote.</h1>
-    <div class="byline">A local document-to-video pipeline &middot; launching fall 2026 &middot; $129 one-time</div>
+    <div class="byline">A local document-to-video pipeline &middot; in development &middot; $129 one-time</div>
   </header>
 
 
   <!-- LEDE -->
   <article class="manuscript">
-    <p class="lede"><span class="lede-opener">Orator takes your markdown</span> documents and produces narrated, camera-ready video. In your own voice. Entirely on your machine. No cloud APIs, no subscription, no recording studio.</p>
+    <p class="lede"><span class="lede-opener">Orator takes your markdown</span> documents and produces narrated, camera-ready video, voiced on your machine by local text-to-speech, with no cloud APIs, no subscription, and no recording studio.</p>
 
-    <p>You already write before you present. The document is the script. The slides are derivable from the same source. The narration is a function of the prose. The whole pipeline can run from one file in one command, and the output can be a finished MP4. Cloud-based competitors charge a subscription and use their own synthetic voices. Orator runs locally in yours.</p>
+    <p>You already write before you present. The document is the script. The slides are derivable from the same source. The narration is a function of the prose. The whole pipeline can run from one file in one command, and the output can be a finished MP4. Cloud services charge a subscription and keep the voices on their servers. Orator runs on your machine, and so do its voices.</p>
   </article>
 
 
   <!-- ACT I -->
   <div class="section-marker">
     <span class="numeral">Act I</span>
-    <div class="heading">One document.<br>One command. <em>Done.</em></div>
+    <div class="heading">One document,<br>one <em>command</em>.</div>
   </div>
 
   <article class="manuscript" id="how">
-    <p>Orator reads your document, narrates it in your cloned voice, renders professional slides from the same source, and composites everything into a finished MP4.</p>
+    <p>Orator reads your document, narrates it with a built-in voice, renders professional slides from the same source, and composites everything into a finished MP4.</p>
 
     <p><strong>Parse.</strong> Your .md or .qmd file is split into sections. Prose becomes narration text. Code blocks, tables, and callouts get spoken descriptions. Section breaks become slide breaks.</p>
 
-    <p><strong>Narrate.</strong> Each section is synthesized in your cloned voice using a <strong>10-second</strong> reference clip. Zero-shot. No training data. No cloud upload.</p>
+    <p><strong>Narrate.</strong> Each section is synthesized by a local text-to-speech engine with built-in voices. Nothing is uploaded.</p>
 
     <p><strong>Render.</strong> Professional slides are generated from the same source document. Syntax-highlighted code, styled tables, accessible color palette, custom themes.</p>
 
@@ -770,7 +780,7 @@
 
 
   <!-- PULL QUOTE -->
-  <blockquote class="pull-quote">Your voice. Your content. Your machine.</blockquote>
+  <blockquote class="pull-quote">Your words, voiced on your machine.</blockquote>
 
 
   <!-- ACT II -->
@@ -782,7 +792,7 @@
   <article class="manuscript">
     <p>Orator was built for the people whose work begins as text. <em>Educators and course creators</em> generate lecture videos, tutorial walkthroughs, and training modules from the lesson notes they already have. <em>Developer advocates</em> turn video docs, API walkthroughs, and changelogs out of the markdown they already write. <em>Corporate L&amp;D teams</em> produce onboarding and compliance training from existing SOPs without any proprietary content leaving the machine. <em>Researchers and technical writers</em> ship video abstracts, conference pre-recordings, and release-note walkthroughs from structured documents.</p>
 
-    <p>The throughline is simple. The script already exists. The platform that turns it into video should not require uploading the script, the voice, or the audience to a third party.</p>
+    <p>The script already exists, and the platform that turns it into video should not require uploading the script or the audience to a third party.</p>
   </article>
 
 
@@ -793,9 +803,9 @@
   </div>
 
   <article class="manuscript">
-    <p>Most competitors in the narrated-video space are cloud-based and subscription-based. Orator runs entirely on your hardware. Your documents and your voice model never leave your computer. For teams subject to data residency, HIPAA, or internal security policies, this is not a feature. It is a requirement.</p>
+    <p>Most competitors in the narrated-video space are cloud-based and subscription-based. Orator runs entirely on your hardware, and your documents never leave your computer, which is the starting requirement for teams subject to data residency, HIPAA, or internal security policies.</p>
 
-    <p>The local-only constraint produces the rest of the design. No account. No telemetry. No internet after install. The voice model is built once from a reference clip you record. The compute happens on the GPU you already paid for.</p>
+    <p>The local-only constraint produces the rest of the design: no account, no telemetry, and no internet after install, with the compute happening on hardware you already own.</p>
   </article>
 
 
@@ -815,7 +825,7 @@
   </div>
   <div class="signature">
     <img src="img/headshot.png" alt="Alex P. Leith" class="signature-avatar" loading="lazy" decoding="async" width="96" height="96">
-    fin. &middot; Orator Editorial &middot; SIM DAD LLC &middot; July 2026
+    fin. &middot; Orator Editorial &middot; SIM DAD LLC &middot; October 2026
   </div>
 
 
@@ -827,7 +837,7 @@
     </div>
     <p>One-time &middot; no subscription &middot; lifetime updates for v1.x.</p>
     <p>Waitlist members lock in the announced $79.</p>
-    <p>Full-length narrated videos from markdown &middot; voice cloning from a 10-second reference clip &middot; professional slide rendering with custom themes &middot; GPU-accelerated encoding (NVIDIA or Apple Silicon) &middot; 100% local, no internet after install &middot; Windows.</p>
+    <p>Full-length narrated videos from markdown &middot; built-in voices &middot; professional slide rendering with custom themes &middot; GPU-accelerated encoding &middot; 100% local, no internet after install &middot; Windows.</p>
     <div class="colophon-row">
       <span class="colophon-label">Team license &middot; 5 seats</span>
       <div class="colophon-price"><sup>$</sup>449</div>
