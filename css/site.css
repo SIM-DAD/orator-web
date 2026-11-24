@@ -374,3 +374,15 @@ ul.hi li::marker { color: var(--signal-ink); }
 .wl-set { border: 0; padding: 0; margin: 0; }
 .wl-set legend { font-weight: 700; padding: 0; margin-bottom: 0.4rem; }
 .wl-set legend span { font-weight: 400; color: var(--muted); }
+
+/* Skip link and 44 px tap targets (checklist A04, C01) */
+.skip { display: inline-flex; align-items: center; min-height: 44px; }
+main:focus { outline: none; }
+.nav-brand { display: flex; align-items: center; min-height: 44px; }
+.oss-item, .radio-row label { min-height: 44px; }
+.oss-item { align-items: center; }
+.footer-links a { display: inline-flex; align-items: center; min-height: 44px; }
+.footer-links { row-gap: 0; }
+/* Subpages: back links, brand links, and footer links at 44 px (checklist C01) */
+.page-head a, .foot .links a { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
+.footer-links a { min-width: 44px; }
